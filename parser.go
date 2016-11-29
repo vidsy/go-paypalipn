@@ -2,12 +2,19 @@ package paypalipn
 
 import (
 	"io"
-	"io/ioutil"
 
 	"github.com/vidsy/go-paypalipn/payload"
 )
 
 type (
+	// Parser takes an environment, transportClient and processor
+	// and parses an IPN paypal populating the passed in struct.
+	Parser struct {
+		environment string
+		client      TransportClient
+		processor   payload.Processor
+	}
+
 	// Loader interface for structs that can be loaded
 	// from give form data.
 	Loader interface {
@@ -15,11 +22,21 @@ type (
 	}
 )
 
+// NewParser creates a new Parser.
+func NewParser(environment string, client TransportClient, processor payload.Processor) *Parser {
+	return &Parser{environment, client, processor}
+}
+
 // Parse takes a http response and struct to populate
 // based on post data in response.
-func Parse(body io.ReadCloser, payloadItem Loader, processor payload.Processor) error {
-	parsedBody, err := readBody(body)
+func (p *Parser) Parse(body io.ReadCloser, payloadItem Loader) error {
+	parsedBody, err := ReadBodyIntoString(body)
 	if err != nil {
+		return err
+	}
+
+	valid, err := Validate(parsedBody, p.environment, p.client)
+	if !valid {
 		return err
 	}
 
@@ -28,19 +45,6 @@ func Parse(body io.ReadCloser, payloadItem Loader, processor payload.Processor) 
 		return err
 	}
 
-	payloadItem.Load(data, processor)
+	payloadItem.Load(data, p.processor)
 	return nil
-}
-
-func readBody(rawBody io.ReadCloser) (string, error) {
-	body, err := ioutil.ReadAll(io.LimitReader(rawBody, 1048576))
-	if err != nil {
-		return "", err
-	}
-
-	if err = rawBody.Close(); err != nil {
-		return "", err
-	}
-
-	return string(body[:]), nil
 }
