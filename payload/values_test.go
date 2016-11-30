@@ -40,7 +40,7 @@ func TestValues(t *testing.T) {
 
 	t.Run(".GetValues()", func(t *testing.T) {
 		t.Run("InUnderScoreFormat", func(t *testing.T) {
-			formData := "foo_0=bar&foo_1=qux"
+			formData := "foo_1=bar&foo_2=qux"
 			values, _ := payload.NewValuesFromFormData(formData)
 
 			fields := values.GetValues("foo", 2)
@@ -50,12 +50,12 @@ func TestValues(t *testing.T) {
 			}
 
 			if fields[1] != "qux" {
-				t.Fatalf(`Expected .GetValues("foo") to be 'qux', got: %v`, fields[2])
+				t.Fatalf(`Expected .GetValues("foo") to be 'qux', got: %v`, fields[1])
 			}
 		})
 
 		t.Run("NumericSuffix", func(t *testing.T) {
-			formData := "foo=test&foo0=bar&foo1=qux"
+			formData := "foo=test&foo1=bar&foo2=qux"
 			values, _ := payload.NewValuesFromFormData(formData)
 
 			fields := values.GetValues("foo", 2)
@@ -65,14 +65,14 @@ func TestValues(t *testing.T) {
 			}
 
 			if fields[1] != "qux" {
-				t.Fatalf(`Expected .GetValues("foo") to be 'qux', got: %v`, fields[2])
+				t.Fatalf(`Expected .GetValues("foo") to be 'qux', got: %v`, fields[1])
 			}
 		})
 	})
 
 	t.Run(".GetValueAtIndex()", func(t *testing.T) {
 		t.Run("InUnderScoreFormat", func(t *testing.T) {
-			formData := "foo=bop&foo_0=bar&foo_1=qux"
+			formData := "foo=bop&foo_1=bar&foo_2=qux"
 			values, _ := payload.NewValuesFromFormData(formData)
 			value := values.GetValueAtIndex("foo", 1)
 
@@ -83,7 +83,7 @@ func TestValues(t *testing.T) {
 		})
 
 		t.Run("NumericSuffix", func(t *testing.T) {
-			formData := "foo=test&foo0=bar&foo1=qux"
+			formData := "foo=test&foo1=bar&foo2=qux"
 			values, _ := payload.NewValuesFromFormData(formData)
 			value := values.GetValueAtIndex("foo", 1)
 
@@ -95,7 +95,7 @@ func TestValues(t *testing.T) {
 
 	t.Run(".ItemCount()", func(t *testing.T) {
 		t.Run("InUnderScoreFormat", func(t *testing.T) {
-			formData := "foo=bop&foo_0=bar&foo_1=qux"
+			formData := "foo=bop&foo_1=bar&foo_2=qux"
 			values, _ := payload.NewValuesFromFormData(formData)
 			count := values.ItemCount("foo")
 			if count != 2 {
@@ -105,7 +105,7 @@ func TestValues(t *testing.T) {
 		})
 
 		t.Run("NumericSuffix", func(t *testing.T) {
-			formData := "foo=test&foo0=bar&foo1=qux"
+			formData := "foo=test&foo1=bar&foo2=qux"
 			values, _ := payload.NewValuesFromFormData(formData)
 			count := values.ItemCount("foo")
 			if count != 2 {

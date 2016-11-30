@@ -39,7 +39,7 @@ func TestPopulate(t *testing.T) {
 		})
 
 		t.Run("PopulatesStruct", func(t *testing.T) {
-			data := `foo=test_foo&bar0=bar_0&bar1=bar_1&baz_0=baz_0&baz_1=baz_1&qux_0=1.23&qux_1=1.25`
+			data := `foo=test_foo&bar1=bar_1&bar2=bar_2&baz_1=baz_1&baz_2=baz_2&qux_1=1.23&qux_2=1.25`
 			values, _ := payload.NewValuesFromFormData(data)
 
 			testStruct := &TestStruct{}
@@ -61,14 +61,13 @@ func TestPopulate(t *testing.T) {
 				t.Fatalf("Expected len(.Nested) to be: 2, got: %d", len(testStruct.Nested))
 			}
 
-			if testStruct.Nested[1].Baz != "baz_1" {
-				t.Fatalf("Expected .Nested[1].Baz to be 'baz_1', got: '%v'", testStruct.Nested[0].Baz)
+			if testStruct.Nested[1].Baz != "baz_2" {
+				t.Fatalf("Expected .Nested[1].Baz to be 'baz_1', got: '%v'", testStruct.Nested[1].Baz)
 			}
 
 			if testStruct.Nested[1].Qux != 1.25 {
-				t.Fatalf("Expected .Nested[1].Qux to be 'qux_1', got: %.2f", testStruct.Nested[0].Qux)
+				t.Fatalf("Expected .Nested[1].Qux to be 'qux_1', got: %.2f", testStruct.Nested[1].Qux)
 			}
-
 		})
 	})
 }

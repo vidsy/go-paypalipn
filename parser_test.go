@@ -13,7 +13,7 @@ import (
 
 type (
 	MockLoader struct {
-		mockLoad func(*payload.Values, payload.Processor)
+		mockLoad func(*payload.Values, payload.Processor) []error
 		Data     *payload.Values
 	}
 
@@ -22,12 +22,13 @@ type (
 	}
 )
 
-func (ml *MockLoader) Load(data *payload.Values, processor payload.Processor) {
+func (ml *MockLoader) Load(data *payload.Values, processor payload.Processor) []error {
 	if ml.mockLoad != nil {
-		ml.mockLoad(data, processor)
+		return ml.mockLoad(data, processor)
 	}
 
 	ml.Data = data
+	return nil
 }
 
 func (mp *MockProcessor) Process(itemType reflect.Type, itemValue reflect.Value, formData *payload.Values, fieldIndex int, countField string) []error {

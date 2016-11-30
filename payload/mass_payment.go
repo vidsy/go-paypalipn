@@ -11,6 +11,9 @@ type (
 	MassPayment struct {
 		PaymentDate   time.Time         `form_field:"payment_date"`
 		PaymentStatus string            `form_field:"payment_status"`
+		IPNTrackID    string            `form_field:"ipn_track_id"`
+		PayerID       string            `form_field:"payer_id"`
+		TXNType       string            `form_field:"txn_type"`
 		Handling      []string          `form_field:"mc_handling"`
 		Items         []MassPaymentItem `form_field:"-"`
 	}

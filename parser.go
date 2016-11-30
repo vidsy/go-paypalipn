@@ -18,7 +18,7 @@ type (
 	// Loader interface for structs that can be loaded
 	// from give form data.
 	Loader interface {
-		Load(*payload.Values, payload.Processor)
+		Load(*payload.Values, payload.Processor) []error
 	}
 )
 

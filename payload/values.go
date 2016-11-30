@@ -37,10 +37,10 @@ func (p *Values) Get(key string) string {
 
 // GetValues returns a slice of values based of the key
 // prefix and the amount of records passed in.
-func (p *Values) GetValues(key string, recordCount int) []string {
+func (p *Values) GetValues(key string, itemCount int) []string {
 	var items []string
 
-	for i := 0; i < recordCount; i++ {
+	for i := 0; i < itemCount; i++ {
 		items = append(items, p.GetValueAtIndex(key, i))
 	}
 
@@ -51,6 +51,7 @@ func (p *Values) GetValues(key string, recordCount int) []string {
 // index.
 func (p *Values) GetValueAtIndex(key string, index int) string {
 	suffixType, found := p.indexSuffixType(key)
+	index++
 
 	if found {
 		switch suffixType {
