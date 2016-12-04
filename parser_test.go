@@ -1,8 +1,6 @@
 package paypalipn_test
 
 import (
-	"bytes"
-	"io/ioutil"
 	"net/http"
 	"reflect"
 	"testing"
@@ -49,7 +47,7 @@ func TestProcessor(t *testing.T) {
 				},
 			}
 
-			rawBody := ioutil.NopCloser(bytes.NewBufferString(`KEY=VALUE`))
+			rawBody := `KEY=VALUE`
 			parser := paypalipn.NewParser(paypalipn.Sandbox, mockClient, &MockProcessor{})
 			parser.Parse(rawBody, &mockLoader)
 

@@ -1,10 +1,6 @@
 package paypalipn
 
-import (
-	"io"
-
-	"github.com/vidsy/go-paypalipn/payload"
-)
+import "github.com/vidsy/go-paypalipn/payload"
 
 type (
 	// Parser takes an environment, transportClient and processor
@@ -27,20 +23,14 @@ func NewParser(environment string, client TransportClient, processor payload.Pro
 	return &Parser{environment, client, processor}
 }
 
-// Parse takes a http response and struct to populate
-// based on post data in response.
-func (p *Parser) Parse(body io.ReadCloser, payloadItem Loader) error {
-	parsedBody, err := ReadBodyIntoString(body)
-	if err != nil {
-		return err
-	}
-
-	valid, err := Validate(parsedBody, p.environment, p.client)
+// Parse takes a string body and a struct to populate.
+func (p *Parser) Parse(body string, payloadItem Loader) error {
+	valid, err := Validate(body, p.environment, p.client)
 	if !valid {
 		return err
 	}
 
-	data, err := payload.NewValuesFromFormData(parsedBody)
+	data, err := payload.NewValuesFromFormData(body)
 	if err != nil {
 		return err
 	}
